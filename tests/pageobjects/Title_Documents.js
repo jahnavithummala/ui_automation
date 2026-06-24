@@ -1,4 +1,4 @@
-import testdata from '../../tests/datasource/testdata.json'
+import testdata from '../../tests/datasource/testdata.json' with { type: 'json' };
 
 export class titledDocuments {
     constructor(page) {

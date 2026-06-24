@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import testData from '../datasource/testdata.json';
+import testData from '../datasource/testdata.json' with { type: 'json' };
 
 dotenv.config();
 const environment = process.env.ENVIRONMENT;

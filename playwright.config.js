@@ -17,7 +17,7 @@ export default defineConfig({
   testDir: './tests/specs',
   /* Run tests in files in parallel */
   globalSetup: './globalSetup.js',
-  globalTeardown: './sendReport.js',
+  globalTeardown: './sendReport.mjs',
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,

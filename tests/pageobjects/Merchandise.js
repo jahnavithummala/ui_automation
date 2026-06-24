@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import testdata from '../../tests/datasource/testdata.json'
+import testdata from '../../tests/datasource/testdata.json' with { type: 'json' };
 
 class MerchandiseConsignment {
     constructor(page) {

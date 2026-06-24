@@ -13,7 +13,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@playwright/test": "^1.61.0",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^22.13.1",
     "allure-commandline": "^2.43.0",
     "allure-playwright": "^3.10.0",
@@ -34,5 +34,5 @@
   "directories": {
     "test": "tests"
   },
-  "type": "module"
+  "type": "commonjs"
 }
