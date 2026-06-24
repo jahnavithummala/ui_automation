@@ -1,0 +1,20 @@
+[
+  {
+    "ScenarioName": "E2E_UI_Consignment_New_Individual_Customer_New_Vehicle",
+    "TestCaseName": "testcase1",
+    "ExistingAccount": "No",
+    "LoginAtBegin": "Yes",
+    "Email": "Fn(GenerateEmail)",
+    "Password": "bjacadmin01",
+    "ConfirmPassword": "bjacadmin01"
+  },
+  {
+    "ScenarioName": "E2E_UI_Consignment_New_Individual_Customer_Existing_Vehicle",
+    "TestCaseName": "testcase1",
+    "ExistingAccount": "No",
+    "LoginAtBegin": "No",
+    "Email": "Fn(GenerateEmail)",
+    "Password": "bjacadmin04",
+    "ConfirmPassword": "bjacadmin04"
+  }
+]

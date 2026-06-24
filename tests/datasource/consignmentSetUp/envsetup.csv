@@ -1,0 +1,5 @@
+environment,url,password,existingCustomer
+atoqa,https://member-atoqa.barrett-jackson.com/consign/vin?event=849,Jahnavi@04-29, ATOQA101225151029bjac@yopmail.com
+hotfixqa,https://member-hotfixqa.barrett-jackson.com/consign/vin?event=849,Jahnavi@04-29,HOTFIXQA150426102107bjac@yopmail.com
+uat,https://member-uat.barrett-jackson.com/consign/vin?event=849,Jahnavi@04-29,UAT160426131613bjac@yopmail.com
+hotfixdev,https://member-hotfixdev.barrett-jackson.com/consign/vin?event=849,,

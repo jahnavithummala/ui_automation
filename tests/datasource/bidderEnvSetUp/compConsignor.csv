@@ -1,0 +1,3 @@
+environment,product,url,cardType,cardNumber,expiryDate,cvv,password
+hotfixqa,Comp Consignor Package,https://member-hotfixqa.barrett-jackson.com/bid/register?event=847&package=6777,DiscoverCard,6011 0000 0000 0004 ,12/29,111,Jahnavi@04-29
+uat,Comp Consignor Package,https://member-uat.barrett-jackson.com/bid/register?event=849&package=6860,American Express Card,3400 000000 00009,12/31,1111,Jahnavi@04-29

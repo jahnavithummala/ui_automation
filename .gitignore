@@ -1,0 +1,29 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Environment variables - DO NOT COMMIT
+.env
+.envConfig
+.env.local
+.env.*.local
+
+# Build artifacts
+allure-report/
+allure-results/
+*.zip
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
