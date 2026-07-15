@@ -60,10 +60,9 @@ async function globalSetup() {
         JSON.stringify(executor, null, 2)
     );
 
-    console.log('====================================');
+    console.log('**********');
     console.log(`Environment : ${environment.toUpperCase()}`);
-    console.log(`Base URL    : ${baseUrl}`);
-    console.log('====================================');
+    console.log('**********');
 }
 
 export default globalSetup;

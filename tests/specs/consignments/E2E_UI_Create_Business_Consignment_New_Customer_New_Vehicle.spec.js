@@ -1,12 +1,5 @@
-import { test } from '@playwright/test'
 import {
-    create_account,
-    addvin,
-    vehicledetails,
-    titledocuments,
-    page,
-    browser,
-    context
+    test, expect
 } from '../../fixtures/baseTest.js'
 import { parse } from "csv-parse/sync"
 import fs from 'fs'
@@ -35,7 +28,7 @@ let envUrl;
 
 vehicleData.forEach((vehicle) => {
     test.describe(`Scenario: ${scenarioName}`, () => {
-        test(`${vehicle.year} ${vehicle.make} ${vehicle.model}`, async () => {
+        test(`${vehicle.year} ${vehicle.make} ${vehicle.model}`, async ({ page, create_account, addvin, vehicledetails, titledocuments }) => {
             await allure.epic(`Consignment - ${environment}`)
             await allure.feature('Business Consignment')
             await allure.story(`${vehicle.year} ${vehicle.make} ${vehicle.model}`)
@@ -78,7 +71,7 @@ vehicleData.forEach((vehicle) => {
 
             await allure.step('Add VIN', async () => {
                 logger.logStep('Adding VIN information')
-                await addvin.enterVIN()
+                await addvin.enterVIN(8)
             })
 
             await allure.step('Enter Vehicle Information', async () => {
@@ -115,11 +108,12 @@ vehicleData.forEach((vehicle) => {
                     await vehicledetails.uploadVehiclePhotos()
                 })
             }
-
-            await allure.step('Click Next when Vehicle Photos Skipped', async () => {
-                logger.logStep('Clicking Next button when vehicle photos are skipped')
-                await addvin.clickNext()
-            })
+            else {
+                await allure.step('Click Next when Vehicle Photos Skipped', async () => {
+                    logger.logStep('Clicking Next button when vehicle photos are skipped')
+                    await addvin.clickNext()
+                })
+            }
 
             await allure.step('Add TitleTo as Business', async () => {
                 logger.logStep(`Adding titled to as - ${chalk.bold.italic.green('Business')}`)
@@ -155,9 +149,11 @@ vehicleData.forEach((vehicle) => {
 
             await allure.step('View the Submission', async () => {
                 await titledocuments.viewSubmission()
+                await page.waitForTimeout(2000)
+                const viewSubmissionSS = await page.screenshot({ fullPage: true });
+                await allure.attachment("View Submission", viewSubmissionSS, "image/png");
                 logger.logInfo('Viewed the submission of Business Consignment')
             })
-
         })
     })
 })

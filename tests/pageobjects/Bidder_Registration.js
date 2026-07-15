@@ -1,4 +1,5 @@
 import testdata from '../../tests/datasource/testdata.json' with { type: 'json' };
+import * as allure from "allure-js-commons";
 
 export class bidderRegistration {
     constructor(page) {
@@ -142,11 +143,16 @@ export class bidderRegistration {
         await this.page.goto(url)
     }
 
+    async pageReload() {
+        await this.page.reload();
+    }
+
     async setUp_absentee_url(url) {
         await this.page.setViewportSize({ width: 1920, height: 940 });
         await this.page.goto(url)
-        await this.page.waitForTimeout(4000);
         await this.page.reload();
+        // await this.page.waitForTimeout(4000);
+        // await this.page.reload();
     }
 
     async setUp_regularBidderMobilia_url(url) {
@@ -162,7 +168,8 @@ export class bidderRegistration {
     async internetBidding() {
         await this.page.locator(this.internet_OnlineBidding).check()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/BidOnline_Check.png', fullPage: true })
+        const internetBiddingSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Internet Bidding", internetBiddingSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -186,7 +193,8 @@ export class bidderRegistration {
         await this.page.locator(this.mobile_number).click()
         await this.page.locator(this.mobile_number).fill(accountPhoneNumber)
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/1_start_registration_upload_DriversLicense.png', fullPage: true })
+        const driversLicenseSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Drivers License Uploaded", driversLicenseSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -220,7 +228,8 @@ export class bidderRegistration {
         await this.page.locator(this.mobile_number).click()
         await this.page.locator(this.mobile_number).fill(accountPhoneNumber)
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/1_enter_manually.png', fullPage: true })
+        const enterManuallySS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Enter Manually", enterManuallySS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -229,7 +238,8 @@ export class bidderRegistration {
     async registerTo_individual() {
         await this.page.locator(this.select_individual).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/2.1_select_individual.png', fullPage: true })
+        const individualSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Register to Individual", individualSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -248,7 +258,8 @@ export class bidderRegistration {
         await this.page.locator(this.relationship_to_business).click()
         await this.page.locator(this.choose_representative).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/2.2_select_business.png', fullPage: true })
+        const businessSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Register to Business", businessSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -276,7 +287,8 @@ export class bidderRegistration {
         await this.page.waitForTimeout(2000)
         await this.page.locator(this.choose_owner).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/2.3_select_dealer.png', fullPage: true })
+        const dealerSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Dealer Selected", dealerSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -287,18 +299,14 @@ export class bidderRegistration {
         await this.page.locator(this.search_address).fill(testdata.mailing_address)
         await this.page.waitForTimeout(3000)
         await this.page.locator(this.select_address).click()
-        await this.page.waitForTimeout(3000)
+        await this.page.waitForTimeout(2000)
         await this.page.locator(this.search_address).click()
         await this.page.locator(this.search_address).fill(testdata.vehicletitling_address)
         await this.page.waitForTimeout(3000)
         await this.page.locator(this.select_address).click()
-        await this.page.waitForTimeout(3000)
-        await this.page.locator(this.search_address).click()
-        await this.page.locator(this.search_address).fill(testdata.titlepaperwork_address)
-        await this.page.waitForTimeout(3000)
-        await this.page.locator(this.select_address).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/3_enter_addresses.png', fullPage: true })
+        const bidderAddressesSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Addresses Entered", bidderAddressesSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -307,7 +315,9 @@ export class bidderRegistration {
         await this.page.locator(this.search_address).fill(testdata.mailing_address)
         await this.page.waitForTimeout(3000)
         await this.page.locator(this.select_address).click()
-        await this.page.waitForTimeout(3000)
+        await this.page.waitForTimeout(2000)
+        const regularBidderAddressesSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Regular Bidder Addresses Entered", regularBidderAddressesSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -324,7 +334,8 @@ export class bidderRegistration {
     async select_biddingCollateral_bidMethod() {
         await this.page.locator(this.biddingCollateral_bidMethod).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/4.1_select_biddingCollateral_bidMethod.png', fullPage: true })
+        const biddingCollateralSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Bidding Collateral Selected", biddingCollateralSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -333,7 +344,8 @@ export class bidderRegistration {
         const personalFundLetter = testdata.fundletterPath
         await this.page.locator(this.check_bankletter).setInputFiles(personalFundLetter)
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/4.2_select_personalCheck_bidMethod.png', fullPage: true })
+        const personalCheckSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Personal Check Selected", personalCheckSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -342,7 +354,8 @@ export class bidderRegistration {
         const businessFundLetter = testdata.fundletterPath
         await this.page.locator(this.check_bankletter).setInputFiles(businessFundLetter)
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/4.3_select_businessCheck_bidMethod.png', fullPage: true })
+        const businessCheckSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Business Check Selected", businessCheckSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -351,21 +364,24 @@ export class bidderRegistration {
         const wireTransferFundLetter = testdata.fundletterPath
         await this.page.locator(this.check_bankletter).setInputFiles(wireTransferFundLetter)
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/4.4_select_wireTransfer_bidMethod.png', fullPage: true })
+        const wireTransferSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Wire Transfer Selected", wireTransferSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
     async select_CreditCardHold_bidMethod() {
         await this.page.locator(this.CreditCardHold_bidMethod).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/4.6_select_CreditCardHold_bidMethod.png', fullPage: true })
+        const creditCardHoldSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Credit Card Hold Selected", creditCardHoldSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
     async select_chooseLater_bidMethod() {
         await this.page.locator(this.chooseLater_bidMethod).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/4.5_select_chooseLater_bidMethod.png', fullPage: true })
+        const chooseLaterSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Choose Later Selected", chooseLaterSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -385,7 +401,8 @@ export class bidderRegistration {
         await this.page.locator(this.insurance_calendar_next).click()
         await this.page.locator(this.select_insurance_date).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/5_customerdocuments.png', fullPage: true })
+        const customerDocumentsSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Customer Documents Uploaded", customerDocumentsSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -393,7 +410,8 @@ export class bidderRegistration {
         const businessDocument = testdata.businessLicensePath
         await this.page.locator(this.upload_business_licence_document).setInputFiles(businessDocument)
         await this.page.waitForTimeout(4000)
-        await this.page.screenshot({ path: './screenshots/bidder/6.1_businessdocument.png', fullPage: true })
+        const businessDocumentSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Business Document Uploaded", businessDocumentSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -423,7 +441,8 @@ export class bidderRegistration {
         const authorizationToBidDocument = testdata.authorizationToBidPath
         await this.page.locator(this.upload_authorization_to_bid).setInputFiles(authorizationToBidDocument)
         await this.page.waitForTimeout(4000)
-        await this.page.screenshot({ path: './screenshots/bidder/6.2_dealerdocuments.png', fullPage: true })
+        const dealerDocumentsSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Dealer Documents Uploaded", dealerDocumentsSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -436,7 +455,8 @@ export class bidderRegistration {
         await this.page.locator(this.tr4product).click()
         // await this.page.locator(this.tr5product).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/7.1_addProducts.png', fullPage: true })
+        const addProductsSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Products Added", addProductsSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -454,7 +474,8 @@ export class bidderRegistration {
         await this.page.locator(this.tr3product).click()
         await this.page.locator(this.tr4product).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/7.2_addProducts_for_SelectPackage.png', fullPage: true })
+        const addProductsSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Products Added", addProductsSS, "image/png");
         await this.page.locator(this.next_button).click()
     }
 
@@ -472,7 +493,8 @@ export class bidderRegistration {
         await frame.locator(this.card_cvv).fill(cvv)
         await frame.locator(this.postalcode).fill(testdata.postalcode)
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/8_add_card_deatils.png', fullPage: true })
+        const addCardDetailsSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Card Details Added", addCardDetailsSS, "image/png");
         await this.page.locator(this.click_pay_for_registration).click()
         await this.page.waitForTimeout(48000)
     }
@@ -494,12 +516,14 @@ export class bidderRegistration {
         await this.page.waitForTimeout(2000)
         await frame1.locator(this.initial2).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/9_docuSignDocument_Signed.png', fullPage: true })
+        const docuSignDocumentSignedSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("DocuSign Document Signed", docuSignDocumentSignedSS, "image/png");
         await frame.locator(this.submit_application).click()
         await this.page.waitForTimeout(2000)
         await this.page.locator(this.view_my_agreement).click()
         await this.page.waitForTimeout(15000)
-        await this.page.screenshot({ path: './screenshots/bidder/10_viewAgreement.png', fullPage: true })
+        const viewAgreementSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("View Agreement", viewAgreementSS, "image/png");
     }
 
     async absenteeBidder_docuSign(firstName, lastName) {
@@ -521,7 +545,8 @@ export class bidderRegistration {
         await this.page.waitForTimeout(2000)
         await frame1.locator(this.signatureRequired).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/9_docuSignDocument_Signed.png', fullPage: true })
+        const docuSignDocumentSignedSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("DocuSign Document Signed", docuSignDocumentSignedSS, "image/png")
         await frame.locator(this.submit_application).click()
         await this.page.waitForTimeout(10000)
 
@@ -539,18 +564,21 @@ export class bidderRegistration {
         console.log("Extracted Postal Code from Address:", addressPostalCode)
         await CCHoldframe.locator(this.postalcode).fill(addressPostalCode)
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/bidder/8_add_card_deatils.png', fullPage: true })
+        const addCardDetailsSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Card Details Added", addCardDetailsSS, "image/png");
         await this.page.locator(this.next_button).click()
         await this.page.waitForTimeout(10000)
         await this.page.locator(this.view_my_agreement).click()
         await this.page.waitForTimeout(20000)
-        await this.page.screenshot({ path: './screenshots/bidder/10_viewAgreement.png', fullPage: true })
+        const viewAgreementSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("View Agreement", viewAgreementSS, "image/png");
     }
 
     async view_agreement() {
         await this.page.waitForTimeout(10000)
         await this.page.locator(this.view_my_agreement).click()
         await this.page.waitForTimeout(20000)
-        await this.page.screenshot({ path: './screenshots/bidder/10_viewAgreement.png', fullPage: true })
+        const viewAgreementSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("View Agreement", viewAgreementSS, "image/png");
     }
 }

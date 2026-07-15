@@ -2,6 +2,7 @@ import { parse } from "csv-parse/sync";
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
+import { allure } from 'allure-playwright'
 
 dotenv.config({ path: path.resolve(__dirname, "tests/datasource/data/.env") });
 

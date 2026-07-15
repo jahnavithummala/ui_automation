@@ -1,6 +1,7 @@
 environment,product,url,cardType,cardNumber,expiryDate,cvv,password
-hotfixqa,Premium Package,https://member-hotfixqa.barrett-jackson.com/bid/register?event=847&package=6777,Visa,4111 1111 1111 1111,12/29,111,Jahnavi@04-29
-hotfixqa,Select Package,https://member-hotfixqa.barrett-jackson.com/bid/register?event=847&package=6777,MasterCard,5105 1051 0510 5100,12/31,111,Jahnavi@04-29
+hotfixqa,Premium Package,https://member-hotfixqa.barrett-jackson.com/bid/register?event=849&package=6998,Visa,4111 1111 1111 1111,12/29,111,Jahnavi@04-29
+hotfixqa,Select Package,https://member-hotfixqa.barrett-jackson.com/bid/register?event=849&package=7001,MasterCard,5105 1051 0510 5100,12/31,111,Jahnavi@04-29
+hotfixqa,Pre-Premium Package,https://member-hotfixqa.barrett-jackson.com/bid/register?event=849&package=6997,American Express Card,3400 000000 00009,12/31,1111,Jahnavi@04-29
 uat,Premium Package,https://member-uat.barrett-jackson.com/bid/register?event=849&package=6884,Visa,4111 1111 1111 1111,12/29,111,Jahnavi@04-29
 uat,Select Package,https://member-uat.barrett-jackson.com/bid/register?event=849&package=6885,MasterCard,5105 1051 0510 5100,12/31,111,Jahnavi@04-29
 uat,Pre-Premium Package,https://member-uat.barrett-jackson.com/bid/register?event=849&package=6883,American Express Card,3400 000000 00009,12/31,1111,Jahnavi@04-29

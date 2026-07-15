@@ -1,7 +1,11 @@
+import { expect } from '@playwright/test';
+import * as allure from "allure-js-commons";
+
 export class addVIN {
     constructor(page) {
         this.page = page
         this.vin = "//input[@aria-label='Enter VIN']" // VIN Input
+        this.vinError = "//span[@slot='errorMessage']" // VIN Error Message
         this.nextButton = "//button[@type='submit']//span[text()='Next']"
 
         this.year = "//input[@aria-roledescription='Number field']"
@@ -24,27 +28,25 @@ export class addVIN {
         this.vinCheckbox = "(//span[contains(.,'This info is correct')])[2]"
     }
 
-    async enterVIN() {
+    async enterVIN(length) {
         //VIN Enter
         await this.page.waitForTimeout(3000)
-        function generateRandomString(length) {
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
-            let result = '';
-            for (let i = 0; i < length; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+
+        let randomVIN = "";
+        for (let i = 0; i < length; i++) {
+            randomVIN += chars.charAt(Math.floor(Math.random() * chars.length));
         }
-        // Generate random first and last names (e.g., 5-10 characters each)
-        const randomVIN = generateRandomString(Math.floor(Math.random() * (26 - 25)) + 17)
         this.generatedVIN = randomVIN
         // Fill the form fields with the generated names
         await this.page.locator(this.vin).click()
         await this.page.locator(this.vin).fill(this.generatedVIN)
-        console.log("Generated VIN:", this.generatedVIN);
+        console.log(`Generated VIN (${length} chars): ${this.generatedVIN}`);
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/consignment/2_vin.png', fullPage: true })
         await this.page.locator(this.nextButton).click()
+        if (length > 17) {
+            await expect(this.page.locator(this.vinError)).toBeVisible();
+        }
         return this.generatedVIN;
     }
 
@@ -83,7 +85,8 @@ export class addVIN {
         await this.page.locator(this.interiorColor).fill(interiorColor)
         await this.page.locator(this.vinCheckbox).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/consignment/3_vehicleinformation.png', fullPage: true })
+        const vehicleInformationSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Vehicle Information Entered", vehicleInformationSS, "image/png");
         await this.page.locator(this.nextButton).click()
     }
 

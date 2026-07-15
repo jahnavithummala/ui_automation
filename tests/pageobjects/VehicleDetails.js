@@ -1,5 +1,6 @@
 import { parse } from "csv-parse/sync"
 import fs from 'fs'
+import * as allure from "allure-js-commons";
 
 export class vehicleDetails {
     constructor(page) {
@@ -33,7 +34,8 @@ export class vehicleDetails {
         await this.page.locator(this.originEngine).click()
         await this.page.locator(this.horsepower).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/consignment/4_vehiclecondition.png', fullPage: true })
+        const vehicleConditionSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Vehicle Condition", vehicleConditionSS, "image/png");
         await this.page.locator(this.nextButton).click()
     }
 
@@ -95,7 +97,8 @@ export class vehicleDetails {
         await this.page.locator(this.shortDescription).fill(shortDescription)
         await this.page.locator(this.longDescription).fill(longDescription)
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/consignment/5_descriptionsSD.png', fullPage: true })
+        const vehicleDescriptionsSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Vehicle Descriptions", vehicleDescriptionsSS, "image/png");
         await this.page.locator(this.nextButton).click()
     }
 
@@ -134,7 +137,8 @@ export class vehicleDetails {
         }
         await this.page.locator(this.pagefootertextclick).evaluate(el => el.scrollIntoView());
         await this.page.waitForTimeout(110000)
-        await this.page.screenshot({ path: './screenshots/consignment/6_vehiclephotos.png', fullPage: true })
+        const vehiclePhotosSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Vehicle Photos", vehiclePhotosSS, "image/png");
         await this.page.locator(this.nextButton).click()
     }
 }

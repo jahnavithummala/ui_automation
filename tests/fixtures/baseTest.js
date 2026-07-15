@@ -1,26 +1,36 @@
-import { test, chromium } from '@playwright/test';
+import { test as base } from '@playwright/test';
 import { createAccount } from '../pageobjects/CreateAccount.js'
 import { addVIN } from '../pageobjects/Add_VIN.js'
 import { vehicleDetails } from '../pageobjects/VehicleDetails.js'
 import { titledDocuments } from '../pageobjects/Title_Documents.js'
+import { accountDashboard } from '../pageobjects/AccountDashboard.js'
+import { bidderRegistration } from '../pageobjects/Bidder_Registration.js'
 
-let browser, context, page;
-let create_account, addvin, vehicledetails, titledocuments;
+export const test = base.extend({
 
-test.beforeAll('setUp', async ({ playwright }) => {
-    browser = await chromium.launch()
-    context = await browser.newContext()
-    page = await context.newPage()
+    create_account: async ({ page }, use) => {
+        await use(new createAccount(page));
+    },
 
-    create_account = new createAccount(page)
-    addvin = new addVIN(page)
-    vehicledetails = new vehicleDetails(page)
-    titledocuments = new titledDocuments(page)
-})
+    addvin: async ({ page }, use) => {
+        await use(new addVIN(page));
+    },
 
-test.afterAll('tearDown', async () => {
-    await page.close()
-    // await browser.close()
-})
+    vehicledetails: async ({ page }, use) => {
+        await use(new vehicleDetails(page));
+    },
 
-export { create_account, addvin, vehicledetails, titledocuments, page, browser, context }
+    titledocuments: async ({ page }, use) => {
+        await use(new titledDocuments(page));
+    },
+
+    accountdashboard: async ({ page }, use) => {
+        await use(new accountDashboard(page));
+    },
+
+    bidder_registration: async ({ page }, use) => {
+        await use(new bidderRegistration(page));
+    }
+});
+
+export { expect } from '@playwright/test';

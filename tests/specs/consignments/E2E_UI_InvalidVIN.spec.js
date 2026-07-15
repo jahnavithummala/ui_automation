@@ -15,18 +15,19 @@ import dotenv from "dotenv";
 dotenv.config({ path: path.resolve(__dirname, "tests/datasource/data/.env") });
 
 const environment = process.env.ENVIRONMENT;
-const scenarioName = scenarioNames.scenario9;
+const scenarioName = scenarioNames.scenario11;
 
 let logger;
 let accData;
 let envUrl;
 
 test.describe(`Scenario: ${scenarioName}`, () => {
-    test('SignUp_Logout_Login_Scenario', async ({ page, create_account }) => {
+    test('Invalid VIN Entry', async ({ page, create_account, addvin }) => {
         await allure.epic(`Consignment - ${environment}`)
-        await allure.feature('SignUp_Logout_Login_Scenario')
+        await allure.feature('Invalid VIN Entry')
         await allure.tags(
             'UI_Regression',
+            'Negative_TestCase'
         )
         logger = new Logger(`Executing ${scenarioName}`)
         logger.logInfo('Starting SignUp')
@@ -58,18 +59,13 @@ test.describe(`Scenario: ${scenarioName}`, () => {
             })
         }
 
-        await allure.step('Logout from the account', async () => {
-            logger.logStep('Logging out from the account')
-            await create_account.logOut_Account()
+        await allure.step('Add VIN', async () => {
+            logger.logStep('Adding VIN information')
+            await addvin.enterVIN(22)
+            await page.waitForTimeout(2000)
+            const vinErrorSS = await page.screenshot({ fullPage: true })
+            await allure.attachment('Invalid VIN Error Message', vinErrorSS, 'image/png')
         })
-
-        await allure.step('Login with the created account - After Logout', async () => {
-            logger.logStep('Logging in with the created account - After Logout')
-            await create_account.login_existingUser(accData.email, testData.password)
-            await page.waitForTimeout(4000);
-            const loginSS = await page.screenshot({ fullPage: true });
-            await allure.attachment("Login Details", loginSS, "image/png");
-        })
-        logger.logInfo('SignUp_Logout_Login_Scenario completed successfully')
+        logger.logInfo('Invalid VIN is entered and error message is displayed')
     })
 })

@@ -1,58 +1,122 @@
-import { test, expect } from '@playwright/test'
-import { bidderRegistration } from '../../pageobjects/Bidder_Registration'
-import { createAccount } from '../../pageobjects/CreateAccount'
+import { test, expect } from '../../fixtures/baseTest.js'
 import { parse } from "csv-parse/sync"
 import fs from 'fs'
-import Logger from '../../../Logger'
+import Logger from '../../../Logger.js'
 import chalk from 'chalk'
-import { env } from 'process'
+import dotenv from "dotenv";
+import path from 'path'
+import { bidderScenarios } from '../../../constants.js'
+import { allure } from 'allure-playwright'
+import { getEnvUrlForBidder } from '../../../utility.js'
+import testData from '../../datasource/testdata.json' with { type: 'json' };
 
+dotenv.config({ path: path.resolve(__dirname, '../../datasource/data/.env') });
+const environment = process.env.ENVIRONMENT || 'uat';
+if (!environment) {
+    throw new Error('ENVIRONMENT is not defined. Check .env loading path and process environment variables.');
+}
 const productdata = parse(fs.readFileSync('tests/datasource/bidderEnvSetUp/product.csv'), {
     columns: true,
     skip_empty_lines: true
 })
+const filteredProductData = productdata.filter(item => (item.environment || 'uat').toLowerCase() === environment.toLowerCase());
+const scenarioName = bidderScenarios.scenario2;
 
-productdata.forEach((bidderEnv) => {
-    test(`${bidderEnv.product} in ${bidderEnv.environment}`, async ({ page }) => {
-        const logger = new Logger(`Creating Business Bidder Registration for ${bidderEnv.product} in ${bidderEnv.environment}`)
-        logger.logInfo(`Creating Business Bidder Registration for ${bidderEnv.product} in ${bidderEnv.environment}`)
-        const create_account = new createAccount(page)
-        const bidder_registration = new bidderRegistration(page)
+let logger;
+let accData;
 
-        logger.logStep(`Setting up URL - ${chalk.bold.italic.yellowBright(bidderEnv.url)}`)
-        await bidder_registration.setUp_url(bidderEnv.url)
-        logger.logStep('Creating an Account')
-        const accData = await create_account.createAcc(bidderEnv.environment, bidderEnv.password)
-        console.log(`Account created with 
-                email: ${chalk.bold.italic.greenBright(accData.email)}, 
-                first name: ${chalk.bold.greenBright(accData.firstName)}, 
-                last name: ${chalk.bold.greenBright(accData.lastName)}`
-        );
-        logger.logStep('Starting Bidder Registration process with Uploading the Drivers License')
-        await bidder_registration.start_registration_upload_DriversLicense(accData.firstName, accData.lastName)
-        //await bidder_registration.enter_manually(accData.firstName, accData.lastName)
-        logger.logStep(`Adding titled to as - ${chalk.bold.italic.green('Business')}`)
-        await bidder_registration.registerTo_business(accData.firstName)
-        logger.logStep('Entering the address details')
-        await bidder_registration.enter_addresses()
-        logger.logStep('Desired Bid Limit with selecting Bid Method')
-        await bidder_registration.desired_BidLimit()
-        await bidder_registration.select_biddingCollateral_bidMethod()
-        // await bidder_registration.select_personalCheck_bidMethod()
-        // await bidder_registration.select_wireTransfer_bidMethod()
-        // await bidder_registration.select_businessCheck_bidMethod()
-        // await bidder_registration.select_chooseLater_bidMethod()
-        logger.logStep(`Uploading Customer Documents - ${chalk.bold.greenBright('Customer Photo', 'Insurance')}`)
-        await bidder_registration.customer_documents()
-        logger.logStep(`Uploading Business Document - ${chalk.bold.greenBright('Business License')}`)
-        await bidder_registration.business_document()
-        logger.logStep('Adding Additional Products')
-        await bidder_registration.addProducts()
-        logger.logStep(`Proceeding with Payment - PaymentMethod: ${chalk.bold.greenBright(bidderEnv.cardType)}, CardNumber: ${chalk.bold.greenBright(bidderEnv.cardNumber)}, ExpiryDate: ${chalk.bold.greenBright(bidderEnv.expiryDate)}, CVV: ${chalk.bold.greenBright(bidderEnv.cvv)}`)
-        await bidder_registration.proceedWithPayment(bidderEnv.cardNumber, bidderEnv.expiryDate, bidderEnv.cvv)
-        logger.logStep('Completing DocuSign process to finalize the registration')
-        //await bidder_registration.docuSign()
-        await bidder_registration.view_agreement()
-        await page.close()
+filteredProductData.forEach((bidderEnv) => {
+    test.describe(`Scenario: ${scenarioName} - ${bidderEnv.product}`, () => {
+        test(`Business Bidder Registration ${bidderEnv.product} - ${environment}`, async ({ page, bidder_registration, create_account }) => {
+            await allure.epic('Bidder')
+            await allure.story(`${bidderEnv.product}`)
+            await allure.tags(
+                'UI_Regression',
+                'Smoke',
+                'Sanity'
+            )
+            logger = new Logger(`Executing ${scenarioName}`)
+            logger.logInfo('Creating Business Bidder Registration')
+
+            await allure.step('Open Bidder URL and Create an Account', async () => {
+                logger.logStep(`Setting up URL - ${chalk.bold.italic.yellowBright(bidderEnv.url)}`)
+                await bidder_registration.setUp_url(bidderEnv.url)
+                logger.logStep('Creating an Account')
+                accData = await create_account.createAcc(environment, testData.password)
+                console.log(`Account created with 
+                    email: ${chalk.bold.italic.greenBright(accData.email)}, 
+                    first name: ${chalk.bold.greenBright(accData.firstName)}, 
+                    last name: ${chalk.bold.greenBright(accData.lastName)}`
+                );
+            })
+
+            const confrimEmail = false
+            if (confrimEmail) {
+                await allure.step('Confirm Account Creation', async () => {
+                    logger.logStep('Confirming Account creation')
+                    await create_account.confirmEmail()
+                })
+            }
+
+            const loginAfterConfirmation = false
+            if (loginAfterConfirmation) {
+                await allure.step('Login with the created account - After Confirmation', async () => {
+                    logger.logStep('Logging in with the created account - After Confirmation')
+                    await create_account.loginIn()
+                })
+            }
+
+            await allure.step('Start Bidder Registration process with Uploading the Drivers License', async () => {
+                logger.logStep('Starting Bidder Registration process with Uploading the Drivers License')
+                await bidder_registration.start_registration_upload_DriversLicense(accData.firstName, accData.lastName)
+                //await bidder_registration.enter_manually(accData.firstName, accData.lastName)
+            })
+
+            await allure.step('Adding titled to as - Individual', async () => {
+                logger.logStep(`Adding titled to as - ${chalk.bold.italic.green('Business')}`)
+                await bidder_registration.registerTo_business(accData.firstName)
+            })
+
+            await allure.step('Entering the address details', async () => {
+                logger.logStep('Entering the address details')
+                await bidder_registration.enter_addresses()
+            })
+
+            await allure.step('Desired Bid Limit with selecting Bid Method', async () => {
+                await bidder_registration.desired_BidLimit()
+                await bidder_registration.select_biddingCollateral_bidMethod()
+                // await bidder_registration.select_personalCheck_bidMethod()
+                // await bidder_registration.select_wireTransfer_bidMethod()
+                // await bidder_registration.select_businessCheck_bidMethod()
+                // await bidder_registration.select_chooseLater_bidMethod()
+            })
+
+            await allure.step(`Uploading Customer Documents - ${chalk.bold.greenBright('Customer Photo', 'Insurance')}`, async () => {
+                await bidder_registration.customer_documents()
+            })
+
+            await allure.step(`Uploading Dealer Specific Documents - 
+            ${chalk.bold.greenBright('Dealer License', 'Resale Certificate', 'Verification of Ownership', 'Authorization to Bid')}`, async () => {
+                logger.logStep(`Uploading Business Document - ${chalk.bold.greenBright('Business License')}`)
+                await bidder_registration.business_document()
+            })
+
+            await allure.step('Adding Additional Products', async () => {
+                await bidder_registration.addProducts()
+            })
+
+            await allure.step(`Proceeding with Payment - PaymentMethod: ${chalk.bold.greenBright(bidderEnv.cardType)}`, async () => {
+                await bidder_registration.proceedWithPayment(bidderEnv.cardNumber, bidderEnv.expiryDate, bidderEnv.cvv)
+            })
+
+            await allure.step('Completing DocuSign process to finalize the registration', async () => {
+                // logger.logStep('Completing DocuSign process to finalize the registration')
+                // await bidder_registration.docuSign()
+                await bidder_registration.view_agreement()
+                const viewAgreementSS = await page.screenshot({ fullPage: true });
+                await allure.attachment("View Agreement", viewAgreementSS, "image/png");
+                await page.close()
+            })
+        })
     })
 })

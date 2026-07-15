@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import testData from '../datasource/testdata.json' with { type: 'json' };
+import * as allure from "allure-js-commons";
 
 dotenv.config();
 const environment = process.env.ENVIRONMENT;
@@ -32,6 +33,7 @@ export class createAccount {
         this.logOut = "//button[@aria-label='Log Out']"
         this.logOutButton = "//button[text()='Logout']"
 
+        this.resetEmail = "//input[@name='email']"
         this.enterEmail = "//input[@placeholder='Enter your inbox here']"
         this.checkInbox = "//button[@title='Check Inbox @yopmail.com']"
         this.IframeYopmail = "//iframe[@name='ifmail']"
@@ -57,6 +59,7 @@ export class createAccount {
         await this.page.locator(this.loginEmail).waitFor({ state: 'visible' });
         await this.page.locator(this.loginEmail).fill(existingCustomer);
         await this.page.locator(this.loginPassword).fill(password);
+        await this.page.waitForTimeout(2000);
         await this.page.locator(this.loginbutton).click();
     }
 
@@ -102,6 +105,9 @@ export class createAccount {
         await this.page.locator(this.password).fill(password);
         await this.page.locator(this.confirmPassword).fill(password);
         await this.page.locator(this.termsAndConditions).check();
+        const createAccountSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Create Account Details", createAccountSS, "image/png");
+        //await this.page.screenshot({ path: './ScreenShot/1 CreateAccountDetails.png', fullPage: true })
         await this.page.locator(this.createAccountButton).click()
         //await this.page.pause(20000)
         // await this.page.locator(this.createAccWebElements.loginhyperlink).click();
@@ -118,21 +124,29 @@ export class createAccount {
     async logOut_Account() {
         await this.page.locator(this.logOut).click()
         await this.page.waitForTimeout(5000)
-        await this.page.screenshot({ path: './ScreenShot/5.1 Logout Screen.png', fullPage: true })
+        const logOutSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("LogOut", logOutSS, "image/png");
+        //await this.page.screenshot({ path: './ScreenShot/6 LogOut.png', fullPage: true })
         await this.page.waitForTimeout(1000)
         await this.page.locator(this.logOutButton).click()
-        await this.page.waitForTimeout(1000)
-        await this.page.screenshot({ path: './ScreenShot/5.2 Home Screen Screen.png', fullPage: true })
+        await this.page.waitForTimeout(4000)
+        const homeScreenSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Home Screen", homeScreenSS, "image/png");
     }
 
-    async forgotPassword() {
+    async forgot_Password() {
         await this.page.waitForTimeout(2000)
         //await this.page.setViewportSize({ width: 1920, height: 1080 });
-        await this.page.screenshot({ path: './ScreenShot/3 PleaseLoginScreen.png', fullPage: true })
-        await this.page.locator(this.loginButton_Header).click()
+        // await this.page.screenshot({ path: './ScreenShot/3 PleaseLoginScreen.png', fullPage: true })
+        // await this.page.locator(this.loginButton_Header).click()
+        //await this.page.waitForTimeout(2000)
+        await this.page.locator(this.loginhyperlink).click()
         await this.page.waitForTimeout(2000)
         await this.page.locator(this.forgotPassword).click()
-        await this.page.screenshot({ path: './ScreenShot/4 ForgotPasswordScreen.png', fullPage: true })
+        await this.page.waitForTimeout(4000)
+        const forgotPasswordSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Forgot Password Screen", forgotPasswordSS, "image/png");
+        await this.page.waitForTimeout(1000)
         await this.page.locator(this.resetEmail).click()
         await this.page.waitForTimeout(8000)
         //await page1.bringToFront();
@@ -145,11 +159,11 @@ export class createAccount {
         const frame = await page1.frameLocator(this.IframeYopmail)
         if (!frame) throw new Error('Iframe not found')
         //await frame.locator(this.ClickHere).click()
-        await this.page.waitForTimeout(5000)
+        await this.page.waitForTimeout(10000)
         const [newPage] = await Promise.all
             ([
                 this.page.context().waitForEvent('page'),
-                await frame.locator(this.ClickHere).click()
+                await frame.locator(this.clickHere).click()
             ]);
         await newPage.waitForLoadState('load');
         await newPage.locator(this.memberEnterEmail).fill(email, { timeout: 90000 })
@@ -166,8 +180,6 @@ export class createAccount {
         //await this.page.bringToFront();
         await this.page.locator(this.loginbutton).click()
         await this.page.waitForTimeout(8000)
-        await this.page.screenshot({ path: './ScreenShot/5 Logged In.png', fullPage: true })
-        await this.page.waitForTimeout(1000)
     }
 
     async confirmEmail() {
@@ -177,7 +189,8 @@ export class createAccount {
         await page1.locator(this.enterEmail).fill(email, { timeout: 90000 })
         await page1.locator(this.checkInbox).click()
         const frame = await page1.frameLocator(this.IframeYopmail)
-        await this.page.screenshot({ path: './ScreenShot/2 Yopmail.png', fullPage: true })
+        const yopmailSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Yopmail Inbox", yopmailSS, "image/png");
         if (!frame) throw new Error('Iframe not found')
         await frame.locator(this.clickHere).click()
 
@@ -196,7 +209,8 @@ export class createAccount {
     async loginIn() {
         await this.page.waitForTimeout(2000)
         //await this.page.setViewportSize({ width: 1920, height: 1080 });
-        await this.page.screenshot({ path: './ScreenShot/3 PleaseLoginScreen.png', fullPage: true })
+        const pleaseLoginSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Please Login Screen", pleaseLoginSS, "image/png");
         await this.page.locator(this.loginhyperlink).click()
         await this.page.waitForTimeout(2000)
         await this.page.locator(this.loginbutton).click()

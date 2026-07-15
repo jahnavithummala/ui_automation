@@ -1,4 +1,5 @@
 import testdata from '../../tests/datasource/testdata.json' with { type: 'json' };
+import * as allure from "allure-js-commons";
 
 export class titledDocuments {
     constructor(page) {
@@ -73,7 +74,8 @@ export class titledDocuments {
         await this.page.waitForTimeout(3000)
         await this.page.locator(this.documents).setInputFiles(backOfTitle)
         await this.page.waitForTimeout(4000)
-        await this.page.screenshot({ path: './screenshots/consignment/7_titledocuments.png', fullPage: true })
+        const titleToSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Title Documents", titleToSS, "image/png");
         await this.page.locator(this.nextButton).click()
     }
 
@@ -126,7 +128,8 @@ export class titledDocuments {
         await this.page.waitForTimeout(3000)
         await this.page.locator(this.namedOperatingAgreement).click()
         await this.page.waitForTimeout(5000)
-        await this.page.screenshot({ path: './screenshots/consignment/7.1_businessinformation.png', fullPage: true })
+        const businessInformationSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Business Information", businessInformationSS, "image/png");
         await this.page.locator(this.nextButton).click()
     }
 
@@ -193,7 +196,8 @@ export class titledDocuments {
         await this.page.waitForSelector(this.selectPreference, { state: 'visible' })
         await this.page.locator(this.selectPreference).click()
         await this.page.waitForTimeout(2000)
-        await this.page.screenshot({ path: './screenshots/consignment/7.2_dealerinformation.png', fullPage: true })
+        const dealerInformationSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Dealer Information", dealerInformationSS, "image/png");
         await this.page.locator(this.nextButton).click()
     }
 
@@ -210,16 +214,9 @@ export class titledDocuments {
         await this.page.waitForTimeout(3000)
         await this.page.locator(this.selectFirstOne).click()
         await this.page.waitForTimeout(5000)
-        await this.page.screenshot({ path: './screenshots/consignment/8_personalinformation.png', fullPage: true })
+        const personalInfoSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Personal Information", personalInfoSS, "image/png");
         await this.page.locator(this.nextButton).click()
-    }
-
-    async diffAddressforPersonalInfo() {
-        await this.page.waitForTimeout(6000)
-        const personalContactNum = Math.floor(100000 + Math.random() * 900000)
-        const perContactNumber = "6145" + personalContactNum
-        console.log("Generated Personal Phone Number:", perContactNumber)
-        
     }
 
     async getPersonalInfo() {
@@ -253,7 +250,8 @@ export class titledDocuments {
         await this.page.waitForTimeout(1500)
         await this.page.locator(this.selectAuctionYesOrNo).click()
         await this.page.waitForTimeout(3000)
-        await this.page.screenshot({ path: './screenshots/consignment/9_finishapplication.png', fullPage: true })
+        const finishApplicationSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Finish Application", finishApplicationSS, "image/png");
         await this.page.locator(this.nextButton).click()
     }
 
@@ -264,7 +262,9 @@ export class titledDocuments {
         await this.page.locator(this.calendar).click()
         await this.page.locator(this.dateFocused).click()
         await this.page.waitForTimeout(3000)
-        await this.page.screenshot({ path: './screenshots/consignment/10_submitapplication.png', fullPage: true })
+        const reviewAndSubmitSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Review and Submit Application", reviewAndSubmitSS, "image/png");
+        await this.page.waitForTimeout(3000)
         await this.page.locator(this.submitApplication).click()
     }
 
@@ -275,9 +275,9 @@ export class titledDocuments {
 
     async viewSubmission() {
         await this.page.waitForTimeout(15000)
-        await this.page.screenshot({ path: './screenshots/consignment/11_congratulationsPage.png', fullPage: true })
+        const congratulationsSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Congratulations Page", congratulationsSS, "image/png");
         await this.page.locator(this.viewMySubmission).click()
         await this.page.waitForTimeout(15000)
-        await this.page.screenshot({ path: './screenshots/consignment/11_viewsubmission.png', fullPage: true })
     }
 }

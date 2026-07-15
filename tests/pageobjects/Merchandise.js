@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test'
 import testdata from '../../tests/datasource/testdata.json' with { type: 'json' };
+import * as allure from "allure-js-commons";
 
 class MerchandiseConsignment {
     constructor(page) {
@@ -58,7 +59,8 @@ class MerchandiseConsignment {
         await this.page.locator(this.UploadAllPhotos_Button).click()
         await this.page.waitForTimeout(10000)
 
-        await this.page.screenshot({ path: './screenshots/merchandise/1_merchandiseItem.png', fullPage: true })
+        const merchandiseSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Merchandise Item", merchandiseSS, "image/png");
 
         await this.page.locator(this.add_another_item).click()
         await this.page.waitForTimeout(2000)
@@ -80,7 +82,8 @@ class MerchandiseConsignment {
         await this.page.waitForTimeout(2000)
         await this.page.locator(this.UploadAllPhotos_Button).click()
         await this.page.waitForTimeout(10000)
-        await this.page.screenshot({ path: './screenshots/merchandise/2_merchandiseItem.png', fullPage: true })
+        const merchandiseSS2 = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Merchandise Item 2", merchandiseSS2, "image/png");
 
         await this.page.locator(this.add_another_item).click()
         await this.page.waitForTimeout(2000)
@@ -102,8 +105,8 @@ class MerchandiseConsignment {
         await this.page.waitForTimeout(2000)
         await this.page.locator(this.UploadAllPhotos_Button).click()
         await this.page.waitForTimeout(10000)
-        await this.page.screenshot({ path: './screenshots/merchandise/3_merchandiseItem.png', fullPage: true })
-
+        const merchandiseSS3 = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Merchandise Item 3", merchandiseSS3, "image/png");
         await this.page.locator(this.Next_Button).click()
     }
 
@@ -118,12 +121,14 @@ class MerchandiseConsignment {
         await this.page.waitForSelector(this.select_first_one, { state: 'visible' })
         await this.page.waitForTimeout(2000)
         await this.page.locator(this.select_first_one).click()
-        await this.page.screenshot({ path: './screenshots/merchandise/4_merchandiseContactInfo.png', fullPage: true })
+        const merchandiseContactInfoSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Merchandise Contact Info", merchandiseContactInfoSS, "image/png");
         await this.page.locator(this.Next_Button).click()
         await this.page.locator(this.eSignature).fill(`${firstName}`)
         await this.page.locator(this.calendar).click()
         await this.page.locator(this.dateFocused).click()
-        await this.page.screenshot({ path: './screenshots/merchandise/5_merchandiseReviewPage.png', fullPage: true })
+        const merchandiseReviewPageSS = await this.page.screenshot({ fullPage: true });
+        await allure.attachment("Merchandise Review Page", merchandiseReviewPageSS, "image/png");
         await this.page.locator(this.Submit_Merchandise_Application).click()
         await this.page.waitForTimeout(5000)
     }
